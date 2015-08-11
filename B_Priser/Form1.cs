@@ -33,9 +33,12 @@ namespace B_Priser
 
             string final_response = stream.ReadToEnd();
 
+            Regex r = new Regex("");
+            Match m = r.Match(final_response);
+
             using (StreamWriter writer = new StreamWriter("log.txt"))
             {
-                writer.Write(final_response);
+                writer.Write(m.Value);
             }
 
         }
