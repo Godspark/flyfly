@@ -42,7 +42,8 @@ namespace B_Priser
             }
 
 
-            // Kommentar:
+            // Kommentar: Dette er en kommentar
+
 
         }
 
