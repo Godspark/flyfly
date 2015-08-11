@@ -42,7 +42,7 @@ namespace B_Priser
             }
 
 
-            // Kommentar: Dette er kult!
+            // Kommentar:
 
         }
 
