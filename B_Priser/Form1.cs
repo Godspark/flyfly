@@ -41,6 +41,9 @@ namespace B_Priser
                 writer.Write(m.Value);
             }
 
+
+            // Kommentar: Dette er kult!
+
         }
 
 
