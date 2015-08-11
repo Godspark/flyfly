@@ -42,6 +42,7 @@
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(92, 20);
             this.dateTimePicker1.TabIndex = 0;
+            this.dateTimePicker1.Value = new System.DateTime(2015, 8, 12, 0, 0, 0, 0);
             // 
             // dateTimePicker2
             // 
@@ -51,6 +52,7 @@
             this.dateTimePicker2.Name = "dateTimePicker2";
             this.dateTimePicker2.Size = new System.Drawing.Size(92, 20);
             this.dateTimePicker2.TabIndex = 1;
+            this.dateTimePicker2.Value = new System.DateTime(2015, 8, 12, 0, 0, 0, 0);
             // 
             // button1
             // 
