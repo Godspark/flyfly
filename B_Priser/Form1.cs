@@ -10,12 +10,13 @@ using System.Windows.Forms;
 using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace B_Priser
 {
     public partial class Form1 : Form
     {
-
+        string _logfileName = "log.txt";
 
         public Form1()
         {
@@ -33,14 +34,16 @@ namespace B_Priser
 
             string final_response = stream.ReadToEnd();
 
-            Regex r = new Regex("");
+            Regex r = new Regex("\\d+</div></td><td class=\"arrdest\"><div class=\"content emphasize\">\\d+");
             Match m = r.Match(final_response);
 
-            using (StreamWriter writer = new StreamWriter("log.txt"))
+            using (StreamWriter writer = new StreamWriter(_logfileName))
             {
                 writer.Write(m.Value);
             }
 
+
+            Process.Start("notepad.exe", _logfileName);
 
             // Kommentar: Dette er en kommentar
 
