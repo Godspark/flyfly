@@ -37,9 +37,11 @@ namespace B_Priser
             Regex r = new Regex("\\d+:\\d+</div></td><td class=\"arrdest\"><div class=\"content emphasize\">\\d+:\\d+");
             Match m = r.Match(final_response);
 
+            string[] times = m.Value.Split(new string[] { "</div></td><td class=\"arrdest\"><div class=\"content emphasize\">" }, StringSplitOptions.None);
+
             using (StreamWriter writer = new StreamWriter(_logfileName))
             {
-                writer.Write(m.Value);
+                writer.Write("Departure: " + times[0] + " Arrival: " + times[1]);
             }
 
 
