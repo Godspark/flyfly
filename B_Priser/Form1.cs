@@ -36,17 +36,21 @@ namespace B_Priser
 
             string final_response = stream.ReadToEnd();
 
-            Regex r = new Regex("\\d+:\\d+</div></td><td class=\"arrdest\"><div class=\"content emphasize\">\\d+:\\d+");
+            Regex rTimes = new Regex(
+                "\\d+:\\d+</div></td><td class=\"arrdest\"><div class=\"content emphasize\">\\d+:\\d+" +
+                ".*fareselect standardlowfare\"><div class=\"content\" title=\"\"><label class=\"label seatsokfare\" title=\"NOK\">\\d+");
 
-            var allMatches = r.Matches(final_response);
+            var timeMatches = rTimes.Matches(final_response);
+
             using (StreamWriter writer = new StreamWriter(_logfileName, true))
             {
-                foreach (Match match in allMatches)
+                foreach (Match match in timeMatches)
                 {
-                    string[] times = match.Value.Split(new string[] { "</div></td><td class=\"arrdest\"><div class=\"content emphasize\">" }, StringSplitOptions.None);
-                    writer.WriteLine("Departure: " + times[0] + " Arrival: " + times[1]);
+                    string[] times = match.Value.Split(new string[] { "</div></td><td class=\"arrdest\"><div class=\"content emphasize\">", "title=\"NOK\">" }, StringSplitOptions.None);
+                    writer.WriteLine("Departure: " + times[0] + " Arrival: " + times[1].Remove(5) + " Price: " + times[2]);
                 }
             }
+
 
             Process.Start("notepad.exe", _logfileName);
         }
