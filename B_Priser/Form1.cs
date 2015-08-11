@@ -34,7 +34,7 @@ namespace B_Priser
 
             string final_response = stream.ReadToEnd();
 
-            Regex r = new Regex("\\d+</div></td><td class=\"arrdest\"><div class=\"content emphasize\">\\d+");
+            Regex r = new Regex("\\d+:\\d+</div></td><td class=\"arrdest\"><div class=\"content emphasize\">\\d+:\\d+");
             Match m = r.Match(final_response);
 
             using (StreamWriter writer = new StreamWriter(_logfileName))
