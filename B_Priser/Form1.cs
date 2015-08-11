@@ -35,21 +35,19 @@ namespace B_Priser
             string final_response = stream.ReadToEnd();
 
             Regex r = new Regex("\\d+:\\d+</div></td><td class=\"arrdest\"><div class=\"content emphasize\">\\d+:\\d+");
-            Match m = r.Match(final_response);
+            
+            var allMatches = r.Matches(final_response);
 
-            string[] times = m.Value.Split(new string[] { "</div></td><td class=\"arrdest\"><div class=\"content emphasize\">" }, StringSplitOptions.None);
-
-            using (StreamWriter writer = new StreamWriter(_logfileName))
+            foreach(Match match in allMatches)
             {
-                writer.Write("Departure: " + times[0] + " Arrival: " + times[1]);
+                string[] times = match.Value.Split(new string[] { "</div></td><td class=\"arrdest\"><div class=\"content emphasize\">" }, StringSplitOptions.None);
+                using (StreamWriter writer = new StreamWriter(_logfileName))
+                {
+                    writer.WriteLine("Departure: " + times[0] + " Arrival: " + times[1]);
+                }
             }
 
-
             Process.Start("notepad.exe", _logfileName);
-
-            // Kommentar: Dette er en kommentar
-
-
         }
 
 
