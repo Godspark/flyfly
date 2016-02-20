@@ -27,9 +27,18 @@ namespace B_Priser
         {
             File.Delete("log.txt");
 
-            string[] d_datoArray = dateTimePicker1.Text.Split('.');
-            string[] r_datoArray = dateTimePicker2.Text.Split('.');
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://www.norwegian.no/fly/velg-flyvning/?D_City=OSLALL&A_City=KRS&TripType=2&D_Day=" + d_datoArray[0] + "&D_Month=" + d_datoArray[1] + "&R_Day=" + r_datoArray[0] + "&R_Month=" + r_datoArray[1] + "&AdultCount=1&ChildCount=0&InfantCount=0");
+            var d_datoArray = dateTimePicker1.Text.Split('.');
+            var r_datoArray = dateTimePicker2.Text.Split('.');
+
+            var dayStart = d_datoArray[0];
+            var yearMonthStart = d_datoArray[2] + d_datoArray[1];
+
+            var dayReturn = r_datoArray[0];
+            var yearMonthReturn = r_datoArray[2] + r_datoArray[1];
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(
+                "http://www.norwegian.no/fly/velg-flyvning/?D_City=OSLALL&A_City=KRS&TripType=2&D_Day=" 
+                + dayStart + "&D_Month=" + yearMonthStart + "&R_Day=" + dayReturn + "&R_Month=" + yearMonthReturn + "&AdultCount=1&ChildCount=0&InfantCount=0");
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
 
             StreamReader stream = new StreamReader(response.GetResponseStream());

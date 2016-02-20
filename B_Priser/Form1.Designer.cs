@@ -42,7 +42,7 @@
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(92, 20);
             this.dateTimePicker1.TabIndex = 0;
-            this.dateTimePicker1.Value = new System.DateTime(2015, 8, 12, 0, 0, 0, 0);
+            this.dateTimePicker1.Value = new System.DateTime(2016, 2, 20, 0, 0, 0, 0);
             // 
             // dateTimePicker2
             // 
@@ -52,7 +52,7 @@
             this.dateTimePicker2.Name = "dateTimePicker2";
             this.dateTimePicker2.Size = new System.Drawing.Size(92, 20);
             this.dateTimePicker2.TabIndex = 1;
-            this.dateTimePicker2.Value = new System.DateTime(2015, 8, 12, 0, 0, 0, 0);
+            this.dateTimePicker2.Value = new System.DateTime(2016, 2, 20, 0, 0, 0, 0);
             // 
             // button1
             // 
@@ -69,9 +69,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(45, 131);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(117, 13);
+            this.label1.Size = new System.Drawing.Size(77, 13);
             this.label1.TabIndex = 3;
-            this.label1.Text = "Has been pushed to git";
+            this.label1.Text = "DW4RFY!!!!!!1";
             // 
             // Form1
             // 
