@@ -25,7 +25,7 @@ namespace B_Priser
 
         private void button1_Click(object sender, EventArgs e)
         {
-            File.Delete("log.txt");
+            File.Delete(_logfileName);
 
             var d_datoArray = dateTimePicker1.Text.Split('.');
             var r_datoArray = dateTimePicker2.Text.Split('.');
