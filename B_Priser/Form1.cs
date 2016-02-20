@@ -11,6 +11,7 @@ using System.Net;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Data.SqlClient;
 
 namespace B_Priser
 {
@@ -66,18 +67,43 @@ namespace B_Priser
                 var previousStartPlace = string.Empty;
                 for (var i = 0; i < timeMatches.Count; i++)
                 {
+
                     var times = timeMatches[i].Value.Split(new string[] { "</div></td><td class=\"arrdest\"><div class=\"content emphasize\">", "title=\"NOK\">" }, StringSplitOptions.None);
                     var destinations = destinationMatches[i].Value.Split(new string[] { "</div></td><td class=\"arrdest\"><div class=\"content\">" }, StringSplitOptions.None);
                     var departureTime = times[0];
-                    var arrivalTime = times[1].Remove(5);
+                    var destinationTime = times[1].Remove(5);
+                    var departureDateTime = Convert.ToDateTime(departureTime);
+                    var destinationDateTime = Convert.ToDateTime(destinationTime);
+                    var flightDateTime = destinationDateTime - departureDateTime;
                     var price = times[2];
                     var departurePlace = destinations[0];
                     var destinationPlace = destinations[1];
-                    
+
                     if (!string.IsNullOrEmpty(previousStartPlace) && previousStartPlace != departurePlace)
                         writer.WriteLine("--------------------------------------------------------------------------------------------------------");
                     previousStartPlace = departurePlace;
-                    writer.WriteLine(departurePlace + " ---> " + destinationPlace + " Departure: " + departureTime + " Arrival: " + arrivalTime + " Price: " + price);                    
+                    writer.WriteLine(departurePlace + " ---> " + destinationPlace + " Departure: " + departureTime + " Arrival: " + destinationTime + " Price: " + price);
+
+                    SqlConnection sqlConnection1 =
+                         new SqlConnection(@"Data Source=DESKTOP-L8H0DTE\SQLEXPRESS;Initial Catalog=LogDB;Integrated Security=True");
+
+
+                    string sql = "INSERT INTO Flight (DeparturePlace, DestinationPlace, DepartureTime, DestinationTime, FlightTime, Price) VALUES(@param1,@param2,@param3,@param4,@param5,@param6)";
+                    SqlCommand cmd = new SqlCommand(sql, sqlConnection1);
+                    cmd.Parameters.AddWithValue("@param1", departurePlace);
+                    cmd.Parameters.AddWithValue("@param2", destinationPlace);
+                    cmd.Parameters.AddWithValue("@param3", departureTime);
+                    cmd.Parameters.AddWithValue("@param4", destinationTime);
+                    cmd.Parameters.AddWithValue("@param5", flightDateTime);
+                    cmd.Parameters.AddWithValue("@param6", price);
+
+                    cmd.CommandType = CommandType.Text;
+
+                    sqlConnection1.Open();
+                    cmd.ExecuteNonQuery();
+                    sqlConnection1.Close();
+
+
                 }
             }
 
