@@ -36,30 +36,50 @@ namespace B_Priser
             var dayReturn = r_datoArray[0];
             var yearMonthReturn = r_datoArray[2] + r_datoArray[1];
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(
+            var request = (HttpWebRequest)WebRequest.Create(
                 "http://www.norwegian.no/fly/velg-flyvning/?D_City=OSLALL&A_City=KRS&TripType=2&D_Day=" 
                 + dayStart + "&D_Month=" + yearMonthStart + "&R_Day=" + dayReturn + "&R_Month=" + yearMonthReturn + "&AdultCount=1&ChildCount=0&InfantCount=0");
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            var response = (HttpWebResponse)request.GetResponse();
 
-            StreamReader stream = new StreamReader(response.GetResponseStream());
+            var stream = new StreamReader(response.GetResponseStream());
 
             string final_response = stream.ReadToEnd();
 
-            Regex rTimes = new Regex(
+            var rTimes = new Regex(
                 "\\d+:\\d+</div></td><td class=\"arrdest\"><div class=\"content emphasize\">\\d+:\\d+" +
                 ".*fareselect standardlowfare\"><div class=\"content\" title=\"\"><label class=\"label seatsokfare\" title=\"NOK\">\\d+");
 
-            var timeMatches = rTimes.Matches(final_response);
+            var rDestinations = new Regex(
+                "[A-Åa-å -]*</div></td><td class=\"arrdest\"><div class=\"content\">[A-Åa-å -]*");
 
-            using (StreamWriter writer = new StreamWriter(_logfileName, true))
+            var timeMatches = rTimes.Matches(final_response);
+            var destinationMatches = rDestinations.Matches(final_response);
+
+            if (timeMatches.Count != destinationMatches.Count)
             {
-                foreach (Match match in timeMatches)
-                {
-                    string[] times = match.Value.Split(new string[] { "</div></td><td class=\"arrdest\"><div class=\"content emphasize\">", "title=\"NOK\">" }, StringSplitOptions.None);
-                    writer.WriteLine("Departure: " + times[0] + " Arrival: " + times[1].Remove(5) + " Price: " + times[2]);
-                }
+                labelError.Text = "CriticalError: timeMatches != destinationMatches";
+                return;
             }
 
+            using (var writer = new StreamWriter(_logfileName, true))
+            {
+                var previousStartPlace = string.Empty;
+                for (var i = 0; i < timeMatches.Count; i++)
+                {
+                    var times = timeMatches[i].Value.Split(new string[] { "</div></td><td class=\"arrdest\"><div class=\"content emphasize\">", "title=\"NOK\">" }, StringSplitOptions.None);
+                    var destinations = destinationMatches[i].Value.Split(new string[] { "</div></td><td class=\"arrdest\"><div class=\"content\">" }, StringSplitOptions.None);
+                    var departureTime = times[0];
+                    var arrivalTime = times[1].Remove(5);
+                    var price = times[2];
+                    var departurePlace = destinations[0];
+                    var destinationPlace = destinations[1];
+                    
+                    if (!string.IsNullOrEmpty(previousStartPlace) && previousStartPlace != departurePlace)
+                        writer.WriteLine("--------------------------------------------------------------------------------------------------------");
+                    previousStartPlace = departurePlace;
+                    writer.WriteLine(departurePlace + " ---> " + destinationPlace + " Departure: " + departureTime + " Arrival: " + arrivalTime + " Price: " + price);                    
+                }
+            }
 
             Process.Start("notepad.exe", _logfileName);
         }
