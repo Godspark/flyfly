@@ -1,5 +1,5 @@
 CREATE DATABASE FlyFlyDB
-CREATE TABLE [dbo].[Flight]
+CREATE TABLE FlyFlyDB.[dbo].[Flight]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [DeparturePlace] NCHAR(100) NULL, 
